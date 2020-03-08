@@ -129,6 +129,29 @@ public:
      * @return Reference to member msg
      */
     eProsima_user_DllExport std::string& msg();
+    /*!
+     * @brief This function copies the value in member load
+     * @param _load New value to be copied in member load
+     */
+    eProsima_user_DllExport void load(const std::vector<int32_t> &_load);
+
+    /*!
+     * @brief This function moves the value in member load
+     * @param _load New value to be moved in member load
+     */
+    eProsima_user_DllExport void load(std::vector<int32_t> &&_load);
+
+    /*!
+     * @brief This function returns a constant reference to member load
+     * @return Constant reference to member load
+     */
+    eProsima_user_DllExport const std::vector<int32_t>& load() const;
+
+    /*!
+     * @brief This function returns a reference to member load
+     * @return Reference to member load
+     */
+    eProsima_user_DllExport std::vector<int32_t>& load();
 
     /*!
      * @brief This function returns the maximum serialized size of an object
@@ -182,6 +205,7 @@ public:
 
 private:
     std::string m_msg;
+    std::vector<int32_t> m_load;
 };
 
 #endif // _CADENA_H_

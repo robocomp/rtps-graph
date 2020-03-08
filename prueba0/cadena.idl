@@ -2,4 +2,5 @@
 struct HelloWorld
 {
     string msg;
+    sequence<long> load;
 };

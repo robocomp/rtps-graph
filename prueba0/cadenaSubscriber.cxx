@@ -23,6 +23,8 @@
 #include <fastrtps/attributes/ParticipantAttributes.h>
 #include <fastrtps/subscriber/Subscriber.h>
 #include <fastrtps/attributes/SubscriberAttributes.h>
+#include <fastrtps/transport/UDPv4TransportDescriptor.h>
+
 
 #include <fastrtps/Domain.h>
 
@@ -38,18 +40,24 @@ cadenaSubscriber::~cadenaSubscriber() {	Domain::removeParticipant(mp_participant
 bool cadenaSubscriber::init()
 {
 
-    // This locator will open a socket to listen network messages on UDPv4 port 22222 over multicast address 239.255.0.1
-    eprosima::fastrtps::rtps::Locator_t locator;
-    IPLocator::setIPv4(locator, 239, 255, 0 , 1);
-    locator.port = 22222;
-
     // Create RTPSParticipant
 
     ParticipantAttributes PParam;
-    PParam.rtps.defaultMulticastLocatorList.push_back(locator);
-
     PParam.rtps.setName("Participant_subscriber"); //You can put the name you want
     //PParam.rtps.builtin.domainId = 80;
+    
+    //Create a descriptor for the new transport.
+    auto custom_transport = std::make_shared<eprosima::fastrtps::rtps::UDPv4TransportDescriptor>();
+        custom_transport->sendBufferSize = 65000;
+        custom_transport->receiveBufferSize = 65000;
+        custom_transport->maxMessageSize = 65000;
+
+    //Disable the built-in Transport Layer.
+    PParam.rtps.useBuiltinTransports = false;
+
+    //Link the Transport Layer to the Participant.
+    PParam.rtps.userTransports.push_back(custom_transport);
+    
     mp_participant = Domain::createParticipant(PParam);
     if(mp_participant == nullptr)
     {
@@ -66,6 +74,10 @@ bool cadenaSubscriber::init()
     Rparam.topic.topicKind = NO_KEY;
     Rparam.topic.topicDataType = myType.getName(); //Must be registered before the creation of the subscriber
     Rparam.topic.topicName = "cadenaPubSubTopic";
+    eprosima::fastrtps::rtps::Locator_t locator;
+    IPLocator::setIPv4(locator, 239, 255, 0 , 1);
+    locator.port = 7900;
+    Rparam.multicastLocatorList.push_back(locator);
     Rparam.qos.m_reliability.kind = eprosima::fastrtps::RELIABLE_RELIABILITY_QOS;
     mp_subscriber = Domain::createSubscriber(mp_participant, Rparam, static_cast<SubscriberListener*>(&m_listener));
     if(mp_subscriber == nullptr)
@@ -102,7 +114,7 @@ void cadenaSubscriber::SubListener::onNewDataMessage(Subscriber* sub)
         {
             // Print your structure data here.
             ++n_msg;
-            std::cout << "Sample received, count=" << n_msg << std::endl;
+            std::cout << "Sample received, count=" << n_msg << " " << st.load().size() << std::endl;
         }
     }
 }
