@@ -28,6 +28,30 @@
 #include <fastrtps/subscriber/SampleInfo.h>
 #include "cadenaPubSubTypes.h"
 
+class FPSCounter
+{
+	public:
+		FPSCounter()
+		{
+			begin = std::chrono::high_resolution_clock::now();
+		}
+    float print( const unsigned int msPeriod = 1000)
+		{
+			auto end = std::chrono::high_resolution_clock::now();
+			auto elapsed = std::chrono::duration<double>(end - begin).count() * 1000;
+			if( elapsed > msPeriod)
+			{
+				std::cout << "Epoch time = " << elapsed/cont << "ms. Fps = " << cont << std::endl;
+				begin = std::chrono::high_resolution_clock::now();
+				cont = 0;
+			}
+			cont++;
+			return elapsed;
+		}
+		std::chrono::time_point<std::chrono::high_resolution_clock> begin;
+		std::uint32_t cont = 0;
+};
+
 class cadenaSubscriber
 {
 public:
@@ -35,6 +59,7 @@ public:
 	virtual ~cadenaSubscriber();
 	bool init();
 	void run();
+	
 private:
 	eprosima::fastrtps::Participant *mp_participant;
 	eprosima::fastrtps::Subscriber *mp_subscriber;
@@ -49,6 +74,7 @@ private:
 		eprosima::fastrtps::SampleInfo_t m_info;
 		int n_matched;
 		int n_msg;
+		FPSCounter fps;
 	} m_listener;
 	HelloWorldPubSubType myType;
 };

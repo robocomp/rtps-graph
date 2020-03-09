@@ -29,6 +29,9 @@
 using namespace eprosima;
 using namespace eprosima::fastrtps;
 
+
+
+
 int main(int argc, char** argv)
 {
 	int type = 0;

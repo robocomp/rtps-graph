@@ -135,7 +135,7 @@ void cadenaPublisher::run()
     {
         mp_publisher->write(&st);  
         ++msgsent;
-        std::cout << "Sending sample, count=" << msgsent << " " << st.load().size() << std::endl;
+        //std::cout << "Sending sample, count=" << msgsent << " " << st.load().size() << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Sleep 250 ms
     } while(true);
 
