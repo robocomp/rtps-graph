@@ -79,6 +79,7 @@ bool cadenaSubscriber::init()
     locator.port = 7900;
     Rparam.multicastLocatorList.push_back(locator);
     Rparam.qos.m_reliability.kind = eprosima::fastrtps::RELIABLE_RELIABILITY_QOS;
+    Rparam.historyMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     mp_subscriber = Domain::createSubscriber(mp_participant, Rparam, static_cast<SubscriberListener*>(&m_listener));
     if(mp_subscriber == nullptr)
     {
@@ -115,6 +116,14 @@ void cadenaSubscriber::SubListener::onNewDataMessage(Subscriber* sub)
             // Print your structure data here.
             ++n_msg;
             std::cout << "Sample received, count=" << n_msg << " " << st.load().size() << std::endl;
+            int j= 0;
+            for(auto i: st.load())
+                if( i != j++)
+                {
+                    std::cout << "SHIT" << std::endl;
+                    exit(-1);
+                }
+
         }
     }
 }

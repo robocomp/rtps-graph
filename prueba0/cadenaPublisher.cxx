@@ -79,7 +79,8 @@ bool cadenaPublisher::init()
     locator.port = 7900;
     Wparam.multicastLocatorList.push_back(locator);
     Wparam.qos.m_reliability.kind = eprosima::fastrtps::RELIABLE_RELIABILITY_QOS;
-    Wparam.qos.m_publishMode.kind = eprosima::fastrtps::ASYNCHRONOUS_PUBLISH_MODE;
+    //Wparam.qos.m_publishMode.kind = eprosima::fastrtps::ASYNCHRONOUS_PUBLISH_MODE;
+    Wparam.historyMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     mp_publisher = eprosima::fastrtps::Domain::createPublisher(mp_participant,Wparam,static_cast<eprosima::fastrtps::PublisherListener*>(&m_listener));
 
 
@@ -120,10 +121,12 @@ void cadenaPublisher::run()
     // Publication code
 
     HelloWorld st;
-    std::vector<int32_t> caca(150, 5); 
+    std::vector<int32_t> caca(5000, 0);
+    int j=0;
+    for(auto &i : caca)
+        i = j++;
     st.load(caca);
     
-
     /* Initialize your structure here */
 
     int msgsent = 0;
