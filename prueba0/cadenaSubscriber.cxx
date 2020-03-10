@@ -115,17 +115,18 @@ void cadenaSubscriber::SubListener::onNewDataMessage(Subscriber* sub)
         {
             // Print your structure data here.
             ++n_msg;
-            //std::cout << "Sample received, count=" << n_msg << " " << st.load().size() << std::endl;
-            int j= 0;
-            for(auto i: st.load())
-                if( i != j++)
-                {
-                    std::cout << "SHIT" << std::endl;
-                    exit(-1);
-                }
+            // std::cout << "Sample received, count=" << n_msg << " " << st.load().size() * 4 << std::endl;
+            //int j= 0;
+            // for(auto i: st.load())
+            //     if( i != j++)
+            //     {
+            //         std::cout << "SHIT" << std::endl;
+            //         exit(-1);
+            //     }
         }
     }
-    fps.print();
+    fps.print(1000, st.load().size() * 4 * 8);
+    //std::cout << "Sample received, count=" << n_msg << " " << st.load().size() * 4 *f << " bps" << std::endl;
 }
 
 void cadenaSubscriber::run()
