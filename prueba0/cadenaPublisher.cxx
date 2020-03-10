@@ -51,6 +51,7 @@ bool cadenaPublisher::init()
     custom_transport->sendBufferSize = 65000;
     custom_transport->receiveBufferSize = 65000;
     custom_transport->maxMessageSize = 65000;
+    custom_transport->interfaceWhiteList.emplace_back("192.168.1.253");
 
     //Disable the built-in Transport Layer.
     PParam.rtps.useBuiltinTransports = false;
