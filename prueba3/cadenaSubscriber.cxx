@@ -86,6 +86,8 @@ bool cadenaSubscriber::init()
     {
         return false;
     }
+    std::cout << "Subscriber created, waiting for Subscribers." << std::endl;
+
     return true;
 }
 

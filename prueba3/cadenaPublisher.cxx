@@ -28,21 +28,21 @@
 
 #include <thread>
 #include <chrono>
-#include "DSRPublisher.h"
+
+#include "cadenaPublisher.h"
 
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 
-DSRPublisher::DSRPublisher() : mp_participant(nullptr), mp_publisher(nullptr) {}
+cadenaPublisher::cadenaPublisher() : mp_participant(nullptr), mp_publisher(nullptr) {}
 
-DSRPublisher::~DSRPublisher() 
-{ 
-    eprosima::fastrtps::Domain::removeParticipant(mp_participant);
-}
+cadenaPublisher::~cadenaPublisher() { eprosima::fastrtps::Domain::removeParticipant(mp_participant);}
 
-bool DSRPublisher::init()
+bool cadenaPublisher::init()
 {
-    // Create RTPSParticipant     
+    
+    // Create RTPSParticipant  
+    
     eprosima::fastrtps::ParticipantAttributes PParam;
     PParam.rtps.setName("Participant_publisher");  //You can put here the name you want
     
@@ -52,8 +52,6 @@ bool DSRPublisher::init()
     custom_transport->receiveBufferSize = 65000;
     custom_transport->maxMessageSize = 65000;
     custom_transport->interfaceWhiteList.emplace_back("127.0.0.1");
-    //custom_transport->interfaceWhiteList.emplace_back("192.168.1.253");
-    
 
     //Disable the built-in Transport Layer.
     PParam.rtps.useBuiltinTransports = false;
@@ -68,13 +66,15 @@ bool DSRPublisher::init()
     }
 
     //Register the type
-    eprosima::fastrtps::Domain::registerType(mp_participant, static_cast<eprosima::fastrtps::TopicDataType*>(&dsrdeltaType));
+
+    eprosima::fastrtps::Domain::registerType(mp_participant, static_cast<eprosima::fastrtps::TopicDataType*>(&myType));
 
     // Create Publisher
+
     eprosima::fastrtps::PublisherAttributes Wparam;
     Wparam.topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
-    Wparam.topic.topicDataType = dsrdeltaType.getName();  //This type MUST be registered
-    Wparam.topic.topicName = "DSRDeltaPubSubTopic";
+    Wparam.topic.topicDataType = myType.getName();  //This type MUST be registered
+    Wparam.topic.topicName = "cadenaPubSubTopic";
     eprosima::fastrtps::rtps::Locator_t locator;
     eprosima::fastrtps::rtps::IPLocator::setIPv4(locator, 239, 255, 0 , 1);
     locator.port = 7900;
@@ -84,7 +84,9 @@ bool DSRPublisher::init()
     Wparam.historyMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     mp_publisher = eprosima::fastrtps::Domain::createPublisher(mp_participant,Wparam,static_cast<eprosima::fastrtps::PublisherListener*>(&m_listener));
 
+
     //Wparam.times.heartbeatPeriod.nanosec = 500000000; //500 ms
+
     if(mp_publisher == nullptr)
     {
         return false;
@@ -93,9 +95,11 @@ bool DSRPublisher::init()
     return true;
 }
 
-void DSRPublisher::PubListener::onPublicationMatched(eprosima::fastrtps::Publisher* pub, eprosima::fastrtps::rtps::MatchingInfo& info)
+void cadenaPublisher::PubListener::onPublicationMatched(eprosima::fastrtps::Publisher* pub, 
+                                                        eprosima::fastrtps::rtps::MatchingInfo& info)
 {
     (void)pub;
+
     if (info.status == eprosima::fastrtps::rtps::MATCHED_MATCHING)
     {
         n_matched++;
@@ -108,16 +112,16 @@ void DSRPublisher::PubListener::onPublicationMatched(eprosima::fastrtps::Publish
     }
 }
 
-void DSRPublisher::run()
+void cadenaPublisher::run()
 {
     while(m_listener.n_matched == 0)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(250)); // Sleep 250 ms
+        std::this_thread::sleep_for(std::chrono::milliseconds(25)); // Sleep 250 ms
     }
-    std::cout << __FUNCTION__ << " HOLA" << std::endl;
-    
+
     // Publication code
-    DSRDelta st;
+
+    HelloWorld st;
     std::vector<int32_t> caca(10000, 0);
     int j=0;
     for(auto &i : caca)
@@ -132,7 +136,25 @@ void DSRPublisher::run()
     {
         mp_publisher->write(&st);  
         ++msgsent;
-        std::cout << "Sending sample, count=" << msgsent << " " << st.load().size() << std::endl;
-        std::this_thread::sleep_for(std::chrono::microseconds(1000000)); // Sleep 250 ms
+        //std::cout << "Sending sample, count=" << msgsent << " " << st.load().size() << std::endl;
+        std::this_thread::sleep_for(std::chrono::microseconds(1)); // Sleep 250 ms
     } while(true);
+
+    // do
+    // {
+    //     if(ch == 'y')
+    //     {
+    //         mp_publisher->write(&st);  ++msgsent;
+    //         std::cout << "Sending sample, count=" << msgsent << ", send another sample?(y-yes,n-stop): ";
+    //     }
+    //     else if(ch == 'n')
+    //     {
+    //         std::cout << "Stopping execution " << std::endl;
+    //         break;
+    //     }
+    //     else
+    //     {
+    //         std::cout << "Command " << ch << " not recognized, please enter \"y/n\":";
+    //     }
+    // } while(std::cin >> ch);
 }

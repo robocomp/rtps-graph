@@ -44,14 +44,14 @@ bool SpecificWorker::setParams(RoboCompCommonBehavior::ParameterList params)
 void SpecificWorker::initialize(int period)
 {
 	std::cout << "Initialize worker" << std::endl;
-
-	// dsrpub.init();
-	// pub_thread = std::move(std::thread(&DSRPublisher::run, dsrpub));   
+	dsrsub.init();
+	sub_thread = std::move(std::thread(&DSRSubscriber::run, dsrsub));
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	dsrpub.init();
+	pub_thread = std::move(std::thread(&DSRPublisher::run, dsrpub));   
 	// std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	
-	// dsrsub.init();
-	// sub_thread = std::move(std::thread(&DSRSubscriber::run, dsrsub));
-
+	
 	this->Period = period;
 	timer.start(1000);
 	emit this->t_initialize_to_compute();
@@ -59,10 +59,8 @@ void SpecificWorker::initialize(int period)
 
 void SpecificWorker::compute()
 {
-	static QTime reloj = QTime::currentTime();
-
-	//fps.print();
-	qDebug() << reloj.restart();
+	fps.print();
+	
 }
 
 
