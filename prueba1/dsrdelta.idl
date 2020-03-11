@@ -1,0 +1,6 @@
+// DSRDelta.idl
+struct DSRDelta
+{
+    string msg;
+    sequence<long> load;
+};
