@@ -1,0 +1,10 @@
+
+Component prueba1
+{
+    Communications
+    {
+    };
+	language Cpp11;
+	statemachine "statemachine.smdsl";
+};
+

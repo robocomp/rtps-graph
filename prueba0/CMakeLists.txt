@@ -16,8 +16,7 @@ add_library(cadena_lib cadena.cxx)
 target_link_libraries(cadena_lib fastcdr fastrtps)
 
 add_executable(cadena cadenaPubSubTypes.cxx cadenaPublisher.cxx cadenaSubscriber.cxx cadenaPubSubMain.cxx)
-target_link_libraries(cadena fastcdr fastrtps
-        cadena_lib )
+target_link_libraries(cadena fastcdr fastrtps  cadena_lib )
 
 
 

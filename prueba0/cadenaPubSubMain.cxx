@@ -23,13 +23,10 @@
 #include "cadenaPublisher.h"
 #include "cadenaSubscriber.h"
 
-
 #include <fastrtps/Domain.h>
 
 using namespace eprosima;
 using namespace eprosima::fastrtps;
-
-
 
 
 int main(int argc, char** argv)
