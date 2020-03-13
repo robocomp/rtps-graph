@@ -45,11 +45,11 @@ void SpecificWorker::initialize(int period)
 {
 	std::cout << "Initialize worker" << std::endl;
 
-	// dsrpub.init();
+	 dsrpub.init();
 	// pub_thread = std::move(std::thread(&DSRPublisher::run, dsrpub));   
 	// std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	
-	// dsrsub.init();
+	 dsrsub.init();
 	// sub_thread = std::move(std::thread(&DSRSubscriber::run, dsrsub));
 
 	this->Period = period;
@@ -60,6 +60,8 @@ void SpecificWorker::initialize(int period)
 void SpecificWorker::compute()
 {
 	static QTime reloj = QTime::currentTime();
+	
+	dsrpub.run();
 
 	//fps.print();
 	qDebug() << reloj.restart();
