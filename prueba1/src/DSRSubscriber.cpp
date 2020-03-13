@@ -49,7 +49,8 @@ bool DSRSubscriber::init()
     custom_transport->sendBufferSize = 65000;
     custom_transport->receiveBufferSize = 65000;
     custom_transport->maxMessageSize = 65000;
-    custom_transport->interfaceWhiteList.emplace_back("192.168.1.253");
+//    custom_transport->interfaceWhiteList.emplace_back("192.168.1.253");
+    custom_transport->interfaceWhiteList.emplace_back("127.0.0.1");
 
     //Disable the built-in Transport Layer.
     PParam.rtps.useBuiltinTransports = false;
@@ -95,6 +96,7 @@ void DSRSubscriber::SubListener::onSubscriptionMatched(Subscriber* sub, Matching
     }
     else
     {
+
         n_matched--;
         std::cout << "Subscriber unmatched" << std::endl;
     }
@@ -128,7 +130,6 @@ void DSRSubscriber::SubListener::onNewDataMessage(Subscriber* sub)
 void DSRSubscriber::run()
 {
     std::cout << "Waiting for Data, press Enter to stop the Subscriber. "<<std::endl;
-    std::cin.ignore();
-    std::cout << "Shutting down the Subscriber." << std::endl;
+   while (true);
 }
 

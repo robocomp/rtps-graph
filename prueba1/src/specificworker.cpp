@@ -59,12 +59,17 @@ void SpecificWorker::initialize(int period)
 
 void SpecificWorker::compute()
 {
+<<<<<<< HEAD
 	static QTime reloj = QTime::currentTime();
 	
 	dsrpub.run();
 
 	//fps.print();
 	qDebug() << reloj.restart();
+=======
+	fps.print();
+	
+>>>>>>> 2664c133c4110938ecf029b2899ab0df79254241
 }
 
 

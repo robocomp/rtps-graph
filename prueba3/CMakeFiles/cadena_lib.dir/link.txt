@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcadena_lib.a  CMakeFiles/cadena_lib.dir/cadena.cxx.o
+/usr/bin/ranlib libcadena_lib.a
