@@ -57,7 +57,7 @@ class DSRSubscriber
 public:
 	DSRSubscriber();
 	virtual ~DSRSubscriber();
-	bool init();
+	bool init(eprosima::fastrtps::Participant *mp_participant_);
 	void run();
 	
 private:

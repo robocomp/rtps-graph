@@ -32,7 +32,7 @@ class DSRPublisher
 public:
 	DSRPublisher();
 	virtual ~DSRPublisher();
-	bool init();
+	bool init(eprosima::fastrtps::Participant *mp_participant_);
 	void run();
 	eprosima::fastrtps::rtps::GUID_t getParticipantID() const ;
 

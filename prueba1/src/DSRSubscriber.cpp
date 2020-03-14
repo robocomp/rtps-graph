@@ -33,39 +33,43 @@ using namespace eprosima::fastrtps::rtps;
 
 DSRSubscriber::DSRSubscriber() : mp_participant(nullptr), mp_subscriber(nullptr) {}
 
-DSRSubscriber::~DSRSubscriber() {	Domain::removeParticipant(mp_participant);}
+DSRSubscriber::~DSRSubscriber() 
+{
+    	//Domain::removeParticipant(mp_participant);
+}
 
-bool DSRSubscriber::init()
+bool DSRSubscriber::init(eprosima::fastrtps::Participant *mp_participant_)
 {
 
-    // Create RTPSParticipant
+    mp_participant = mp_participant_;
+    // // Create RTPSParticipant
 
-    ParticipantAttributes PParam;
-    PParam.rtps.setName("Participant_subscriber"); //You can put the name you want
-    //PParam.rtps.builtin.domainId = 80;
+    // ParticipantAttributes PParam;
+    // PParam.rtps.setName("Participant_subscriber"); //You can put the name you want
+    // //PParam.rtps.builtin.domainId = 80;
     
-    //Create a descriptor for the new transport.
-    auto custom_transport = std::make_shared<eprosima::fastrtps::rtps::UDPv4TransportDescriptor>();
-    custom_transport->sendBufferSize = 65000;
-    custom_transport->receiveBufferSize = 65000;
-    custom_transport->maxMessageSize = 65000;
-//    custom_transport->interfaceWhiteList.emplace_back("192.168.1.253");
-    custom_transport->interfaceWhiteList.emplace_back("127.0.0.1");
+    // //Create a descriptor for the new transport.
+    // auto custom_transport = std::make_shared<eprosima::fastrtps::rtps::UDPv4TransportDescriptor>();
+    // custom_transport->sendBufferSize = 65000;
+    // custom_transport->receiveBufferSize = 65000;
+    // custom_transport->maxMessageSize = 65000;
+    // // custom_transport->interfaceWhiteList.emplace_back("192.168.1.253");
+    // custom_transport->interfaceWhiteList.emplace_back("127.0.0.1");
 
-    //Disable the built-in Transport Layer.
-    PParam.rtps.useBuiltinTransports = false;
+    // //Disable the built-in Transport Layer.
+    // PParam.rtps.useBuiltinTransports = false;
 
-    //Link the Transport Layer to the Participant.
-    PParam.rtps.userTransports.push_back(custom_transport);
+    // //Link the Transport Layer to the Participant.
+    // PParam.rtps.userTransports.push_back(custom_transport);
     
-    mp_participant = Domain::createParticipant(PParam);
-    if(mp_participant == nullptr)
-    {
-        return false;
-    }
+    // mp_participant = Domain::createParticipant(PParam);
+    // if(mp_participant == nullptr)
+    // {
+    //     return false;
+    // }
 
-    //Register the type
-    Domain::registerType(mp_participant, static_cast<TopicDataType*>(&dsrdeltaType));
+    // //Register the type
+    // Domain::registerType(mp_participant, static_cast<TopicDataType*>(&dsrdeltaType));
 
     // Create Subscriber
     SubscriberAttributes Rparam;
@@ -86,6 +90,10 @@ bool DSRSubscriber::init()
     }
     return true;
 }
+
+///////////////////////////////////////////
+/// Callbacks
+///////////////////////////////////////////
 
 void DSRSubscriber::SubListener::onSubscriptionMatched(Subscriber* sub, MatchingInfo& info)
 {

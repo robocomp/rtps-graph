@@ -37,39 +37,40 @@ DSRPublisher::DSRPublisher() : mp_participant(nullptr), mp_publisher(nullptr) {}
 
 DSRPublisher::~DSRPublisher() 
 { 
-    eprosima::fastrtps::Domain::removeParticipant(mp_participant);
+    //eprosima::fastrtps::Domain::removeParticipant(mp_participant);
 }
 
-bool DSRPublisher::init()
+bool DSRPublisher::init(eprosima::fastrtps::Participant *mp_participant_)
 {
-    // Create RTPSParticipant     
-    eprosima::fastrtps::ParticipantAttributes PParam;
-    PParam.rtps.setName("Participant_publisher");  //You can put here the name you want
+    mp_participant = mp_participant_;
+    // // Create RTPSParticipant     
+    // eprosima::fastrtps::ParticipantAttributes PParam;
+    // PParam.rtps.setName("Participant_publisher");  //You can put here the name you want
     
-    //Create a descriptor for the new transport.
-    auto custom_transport = std::make_shared<UDPv4TransportDescriptor>();
-    custom_transport->sendBufferSize = 65000;
-    custom_transport->receiveBufferSize = 65000;
-    custom_transport->maxMessageSize = 65000;
-    custom_transport->interfaceWhiteList.emplace_back("127.0.0.1");
-    //custom_transport->interfaceWhiteList.emplace_back("192.168.1.253");
+    // //Create a descriptor for the new transport.
+    // auto custom_transport = std::make_shared<UDPv4TransportDescriptor>();
+    // custom_transport->sendBufferSize = 65000;
+    // custom_transport->receiveBufferSize = 65000;
+    // custom_transport->maxMessageSize = 65000;
+    // custom_transport->interfaceWhiteList.emplace_back("127.0.0.1");
+    // //custom_transport->interfaceWhiteList.emplace_back("192.168.1.253");
     
 
-    //Disable the built-in Transport Layer.
-    PParam.rtps.useBuiltinTransports = false;
+    // //Disable the built-in Transport Layer.
+    // PParam.rtps.useBuiltinTransports = false;
 
-    //Link the Transport Layer to the Participant.
-    PParam.rtps.userTransports.push_back(custom_transport);
+    // //Link the Transport Layer to the Participant.
+    // PParam.rtps.userTransports.push_back(custom_transport);
 
-    mp_participant = eprosima::fastrtps::Domain::createParticipant(PParam);
+    // mp_participant = eprosima::fastrtps::Domain::createParticipant(PParam);
 
-    if(mp_participant == nullptr)
-    {
-        return false;
-    }
+    // if(mp_participant == nullptr)
+    // {
+    //     return false;
+    // }
 
-    //Register the type
-    eprosima::fastrtps::Domain::registerType(mp_participant, static_cast<eprosima::fastrtps::TopicDataType*>(&dsrdeltaType));
+    // //Register the type
+    // eprosima::fastrtps::Domain::registerType(mp_participant, static_cast<eprosima::fastrtps::TopicDataType*>(&dsrdeltaType));
 
     // Create Publisher
     eprosima::fastrtps::PublisherAttributes Wparam;

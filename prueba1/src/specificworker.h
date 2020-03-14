@@ -30,6 +30,7 @@
 #include <genericworker.h>
 #include <innermodel/innermodel.h>
 
+#include "dsrparticipant.h"
 #include "DSRPublisher.h"
 #include "DSRSubscriber.h"
 #include <fps/fps.h>
@@ -55,6 +56,7 @@ public slots:
 //--------------------
 private:
 	std::shared_ptr<InnerModel> innerModel;
+	DSRParticipant dsrparticipant;
 	DSRPublisher dsrpub;
 	DSRSubscriber dsrsub;
 	FPSCounter fps;

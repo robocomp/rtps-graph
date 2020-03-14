@@ -11,6 +11,7 @@ SET ( SOURCES
   dsrdeltaPubSubTypes.cxx
   dsrdelta.cxx
   DSRSubscriber.cpp
+  dsrparticipant.cpp
 )
 
 # Headers set

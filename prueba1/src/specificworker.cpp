@@ -22,9 +22,7 @@
 * \brief Default constructor
 */
 SpecificWorker::SpecificWorker(TuplePrx tprx) : GenericWorker(tprx)
-{
-
-}
+{}
 
 /**
 * \brief Default destructor
@@ -45,10 +43,14 @@ void SpecificWorker::initialize(int period)
 {
 	std::cout << "Initialize worker" << std::endl;
 
-	 dsrpub.init();
-	 participantID = dsrpub.getParticipantID();
-	 
-	 dsrsub.init();
+	// Create participant 
+	auto [suc , participant_handle] = dsrparticipant.init();
+	
+	// Initialize publisher
+	dsrpub.init(participant_handle);
+	
+	 // Initialize subscriptor
+	dsrsub.init(participant_handle);
 	
 	this->Period = period;
 	timer.start(1000);
