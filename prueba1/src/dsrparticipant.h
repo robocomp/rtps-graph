@@ -23,8 +23,8 @@
 
 #include <fastrtps/fastrtps_fwd.h>
 #include "dsrdeltaPubSubTypes.h"
-#include "DSRPublisher.h"
-#include "DSRSubscriber.h"
+#include "dsrpublisher.h"
+#include "dsrsubscriber.h"
 
 class DSRParticipant
 {

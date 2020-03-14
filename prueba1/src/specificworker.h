@@ -31,8 +31,8 @@
 #include <innermodel/innermodel.h>
 
 #include "dsrparticipant.h"
-#include "DSRPublisher.h"
-#include "DSRSubscriber.h"
+#include "dsrpublisher.h"
+#include "dsrsubscriber.h"
 #include <fps/fps.h>
 #include <QTime>
 

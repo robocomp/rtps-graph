@@ -28,7 +28,7 @@
 
 #include <thread>
 #include <chrono>
-#include "DSRPublisher.h"
+#include "dsrpublisher.h"
 
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
