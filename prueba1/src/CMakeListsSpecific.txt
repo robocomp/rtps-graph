@@ -7,10 +7,10 @@ find_package(fastrtps REQUIRED)
 SET ( SOURCES
   specificworker.cpp
   specificmonitor.cpp
-  DSRPublisher.cpp
+  dsrpublisher.cpp
   dsrdeltaPubSubTypes.cxx
   dsrdelta.cxx
-  DSRSubscriber.cpp
+  dsrsubscriber.cpp
   dsrparticipant.cpp
 )
 
