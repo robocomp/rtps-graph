@@ -59,6 +59,7 @@ private:
 	DSRSubscriber dsrsub;
 	FPSCounter fps;
 	std::thread pub_thread, sub_thread;
+	eprosima::fastrtps::rtps::GUID_t participantID;
 
 };
 

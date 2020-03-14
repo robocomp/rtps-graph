@@ -78,6 +78,7 @@ bool DSRSubscriber::init()
     Rparam.multicastLocatorList.push_back(locator);
     Rparam.qos.m_reliability.kind = eprosima::fastrtps::RELIABLE_RELIABILITY_QOS;
     Rparam.historyMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
+    m_listener.participant_ID = mp_participant->getGuid();
     mp_subscriber = Domain::createSubscriber(mp_participant, Rparam, static_cast<SubscriberListener*>(&m_listener));
     if(mp_subscriber == nullptr)
     {
@@ -96,7 +97,6 @@ void DSRSubscriber::SubListener::onSubscriptionMatched(Subscriber* sub, Matching
     }
     else
     {
-
         n_matched--;
         std::cout << "Subscriber unmatched" << std::endl;
     }
@@ -106,25 +106,17 @@ void DSRSubscriber::SubListener::onNewDataMessage(Subscriber* sub)
 {
     // Take data
     DSRDelta st;
-    //std::cout << "Sample received" << std::endl;
+    std::cout << "participant_ID " << participant_ID  << std::endl;
     if(sub->takeNextData(&st, &m_info))
     {
         if(m_info.sampleKind == ALIVE)
-        {
-            // Print your structure data here.
-            ++n_msg;
-            std::cout << "Sample received, count=" << n_msg << " " << st.load().size() * 4 << std::endl;
-            //int j= 0;
-            // for(auto i: st.load())
-            //     if( i != j++)
-            //     {
-            //         std::cout << "SHIT" << std::endl;
-            //         exit(-1);
-            //     }
-        }
+            if( m_info.sample_identity.writer_guid().is_on_same_process_as(participant_ID) == false)
+            {
+                ++n_msg;
+                std::cout << "Sample received, count=" << n_msg << " " << st.load().size() * 4 << " " << m_info.sample_identity.writer_guid() << std::endl;
+            }
     }
     //fps.print(1000, st.load().size() * 4 * 8);
-    //std::cout << "Sample received, count=" << n_msg << " " << st.load().size() * 4 *f << " bps" << std::endl;
 }
 
 void DSRSubscriber::run()

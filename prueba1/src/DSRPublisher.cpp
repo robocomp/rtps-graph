@@ -62,6 +62,7 @@ bool DSRPublisher::init()
     PParam.rtps.userTransports.push_back(custom_transport);
 
     mp_participant = eprosima::fastrtps::Domain::createParticipant(PParam);
+
     if(mp_participant == nullptr)
     {
         return false;
@@ -91,6 +92,11 @@ bool DSRPublisher::init()
     }
     std::cout << "Publisher created, waiting for Subscribers." << std::endl;
     return true;
+}
+
+eprosima::fastrtps::rtps::GUID_t DSRPublisher::getParticipantID() const
+{   
+    return mp_participant->getGuid();
 }
 
 void DSRPublisher::PubListener::onPublicationMatched(eprosima::fastrtps::Publisher* pub, eprosima::fastrtps::rtps::MatchingInfo& info)
@@ -132,7 +138,7 @@ void DSRPublisher::run()
     {
         mp_publisher->write(&st);  
         ++msgsent;
-        std::cout << "Sending sample, count=" << msgsent << " " << st.load().size() << std::endl;
+        std::cout << "Sending sample, count=" << msgsent << " " << st.load().size() * 4 << std::endl;
         std::this_thread::sleep_for(std::chrono::microseconds(1000000)); // Sleep 250 ms
     } while(true);
 }
